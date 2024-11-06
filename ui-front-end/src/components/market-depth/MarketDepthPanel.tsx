@@ -1,27 +1,26 @@
 import { MarketDepthRow } from "./useMarketDepthData"; //type definition
 import "./MarketDepthPanel.css";
-import { PriceCell } from "./PriceCell";
+import { PriceCell } from "./PriceCell"; //price render component
 
 interface MarketDepthPanelProps {
-  data: MarketDepthRow[]; //defines the prop
+  data: MarketDepthRow[]; //defines the prop expected for this component
 }
 
-export const MarketDepthPanel = (props: MarketDepthPanelProps) => {
-  //ask steve deconstruct data?
-  console.log({ props });
+export const MarketDepthPanel = ({ data }: MarketDepthPanelProps) => {
+  //deconstruct prop
 
-  const quantities = props.data.map((row) => {
+  const quantities = data.map((row) => {
     return Math.max(row.bidQuantity, row.offerQuantity);
-  }); //maps over arraw returning the maximum then store in quantity array
+  }); //maps over row returning the maximum then store in quantity array(row)
 
-  const max = Math.max(...quantities); //finds maxium value and stores in max variable
+  const max = Math.max(...quantities); //finds maximum value across the rows and stores in max variable
 
   const percentageQuantity = (quantity: number, max: number) =>
-    (quantity / max) * 100; //function to calculate percentage
+    (quantity / max) * 100; //function to calculate percentage relative to the max
 
   return (
     <>
-      <h2>Algo Trading Data</h2>
+      <h2>Algo Trading Price Ticker</h2>
       <div className="table-container">
         <table className="MarketDepthPanel">
           <thead>
@@ -41,23 +40,25 @@ export const MarketDepthPanel = (props: MarketDepthPanelProps) => {
             </tr>
           </thead>
           <tbody>
-            {props.data.map(
+            {data.map(
+              //table body populated dynamically using data.map, each row maps to a new tr
               (
                 row,
-                index //maps over data array new for for each entry
+                index //maps over data array new  for each entry
               ) => (
                 <tr key={index}>
-                  {/*key for unique identification*/}
+                  {/*key for unique identification for each row*/}
                   <td>{index}</td>
                   <td className="bid">
                     <div className="gauge-container">
                       <div
                         className="gauge-bar"
                         style={{
-                          width: `${percentageQuantity(row.bidQuantity, max)}%`,
+                          width: `${percentageQuantity(row.bidQuantity, max)}%`, //template literal to embed expression into string directly
                         }}
                       ></div>
-                      <span>{row.bidQuantity}</span>
+                      <span>{row.bidQuantity}</span>{" "}
+                      {/*bid quantity displayed in span element */}
                     </div>
                   </td>
                   <PriceCell
@@ -94,6 +95,7 @@ export const MarketDepthPanel = (props: MarketDepthPanelProps) => {
                         }}
                       ></div>
                       <span>{row.offerQuantity}</span>
+                      {/*ask quantity displayed in span element */}
                     </div>
                   </td>
                 </tr>

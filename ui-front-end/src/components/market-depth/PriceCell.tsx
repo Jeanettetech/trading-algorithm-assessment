@@ -14,7 +14,7 @@ export const PriceCell = ({
   showPercentage,
   className,
 }: PriceCellProps) => {
-  const lastValueRef = useRef(price); //keepeing track of last price
+  const lastValueRef = useRef(price); //keeping track of last price
   const diff = price - lastValueRef.current;
   const percentageDiff = (diff / lastValueRef.current) * 100; //calculating percentage difference
 
@@ -22,11 +22,12 @@ export const PriceCell = ({
     lastValueRef.current = price;
   }, [price]); //effect hook triggers when price changes
 
-  const color = diff > 0 ? "green" : diff < 0 ? "red" : "black";
-  const formattedPrice = price.toFixed(2); // Format price to two decimal places//ternary operator fir colour
+  const color = diff > 0 ? "green" : diff < 0 ? "red" : "black"; //ternary operator for colour
+  const formattedPrice = price.toFixed(2); // Format price to two decimal places
 
   return (
     <td className={`price-cell ${isBid ? "bid" : "offer"} ${className}`}>
+      {/*classname dynamically applied based on if it is a bid or offer */}
       {/*template literal* bid /offer is referring the props data array*/}
       {showPercentage ? (
         <span
@@ -41,7 +42,7 @@ export const PriceCell = ({
         <>
           {isBid ? (
             <span className="price-arrow" style={{ color }}>
-              {/* span containsers for text*/}
+              {/* span containers for text*/}
               {diff > 0 ? "▲" : diff < 0 ? "▼" : null}
               {formattedPrice}
             </span>
